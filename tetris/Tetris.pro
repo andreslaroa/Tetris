@@ -48,6 +48,18 @@ predicates
   
   regla(tablero,tipo,orientacion,postab,tablero)
   
+  /*En este caso vamos a recibir tres par√°metros que nos dar√°n las alturas disponibles, y devolvemos la menor y su columna*/
+  
+  /*calcula_menor3posiciones(postab, postab, postab, postab, postab)*/ 
+  
+  /*En este caso es igual que el de tres posiciones pero solo con 2*/
+  
+  /*calcula_menor2posiciones(postab, postab, postab, postab)*/
+  
+  /*Para el c√°lculo de la fila menor*/
+  
+  menor(postab, postab, postab)
+  
   mete(ficha,tablero,tablero)
   
   cambia_fila(tabla,suelo,postab,postab,ancho,tabla,suelo)
@@ -81,7 +93,7 @@ predicates
   tetris()
 
 clauses
-/* Extrae la fila que nosotros queremos con el cuarto par·metro*/
+/* Extrae la fila que nosotros queremos con el cuarto par√°metro*/
 /*Cuando el contador es igual a la fila_objetivo, extraemos la fila deseada*/
      
   extrae_fila(Fila,Tabla,Indice,Indice):-
@@ -94,7 +106,7 @@ clauses
 
 
      
-/* El predicado permite obtener la altura de la columna deseada a travÈs del par·metro suelos*/  
+/* El predicado permite obtener la altura de la columna deseada a trav√©s del par√°metro suelos*/  
      
   obtiene_fila(Numfila,[H|_],Contador,Contador):-
      Numfila=H.
@@ -126,7 +138,7 @@ clauses
 
      
 /* Vamos a recorrer la fila recalculando el suelo */
-/*Caso en el que no hay m·s elementos de la fila*/
+/*Caso en el que no hay m√°s elementos de la fila*/
   recorrefila(_,[],_,[]).
      
 /* Vamos iterando si hay un 0 esa posicion de suelo se queda como est? */
@@ -137,8 +149,8 @@ clauses
      
 /*La fila empieza por el primer elemento, y el id de la fila se guarda en Numero*/     	
 /*Cuando hay un 1. El suelo temporalmente es la fila */
-/*El par·metro n˙mero es el identificador de la fila que recorre*/
-/*Cuando este valor es mayor que el que habÌa anteriormente, se cambia el valor de esa posiciÛn del suelo*/
+/*El par√°metro n√∫mero es el identificador de la fila que recorre*/
+/*Cuando este valor es mayor que el que hab√≠a anteriormente, se cambia el valor de esa posici√≥n del suelo*/
      
   recorrefila(Numero,[H|T],[S_in|Resto],Suelo_out):-         
       recorrefila(Numero,T,Resto,Queda),
@@ -155,8 +167,12 @@ clauses
   mayor(_,M,M).
    
    
-   
-   
+/*Formula para la comprobacion del menor*/
+  menor(A, B, Menor) :-
+     A<B,
+     Menor = A.
+        
+  menor(_,M,M).
    
 /* Determina si una fila esta llena de 1's */
 /*Si el elemenot de la fila tiene un 1 pasa al segundo elemento, si contiene un cero falla*/
@@ -170,34 +186,34 @@ clauses
   	
   	
 /* Quita las filas que est?n llenas de unos */
-/*Si el contador externo es igual al interno, devuelve tabla vacia porque ha llegado al final de la tabla (piso m·s alto)*/  
+/*Si el contador externo es igual al interno, devuelve tabla vacia porque ha llegado al final de la tabla (piso m√°s alto)*/  
   quitafilas([],Contador_in,Contador_out,Tabla_out):-
      Contador_out=Contador_in,
-     Tabla_out=[],!. /*El ! indica que si todas las sentencias son correctas pare el flujo de ejecuciÛn del predicado*/
+     Tabla_out=[],!. /*El ! indica que si todas las sentencias son correctas pare el flujo de ejecuci√≥n del predicado*/
  
- /*Caso en el que la fila no est· llena de unos*/    
+ /*Caso en el que la fila no est√° llena de unos*/    
   quitafilas([HTabla|TTabla],Contador_in,Contador_out,Tabla_out):- 
      HTabla=[_|Numeros],    
      not(filallena(Numeros)),
      quitafilas(TTabla,Contador_in,Contador_out,Tabla_int),
      Tabla_out=[HTabla|Tabla_int].
      
-/*Caso en el que la fila est· llena de unos*/     
+/*Caso en el que la fila est√° llena de unos*/     
   quitafilas([H|Tabla_in],Contador_in,Contador_out,Tabla_out):-  /* Es para el caso que la fila de la cabeza est? llena de 1's */
-     H=[_|Numeros], /*Esta H es la fila, y est· separando el id de la fila (_) con los propios valores (Numeros)*/
-     filallena(Numeros),/*Comprueba si la fila est· llena de 1's*/
+     H=[_|Numeros], /*Esta H es la fila, y est√° separando el id de la fila (_) con los propios valores (Numeros)*/
+     filallena(Numeros),/*Comprueba si la fila est√° llena de 1's*/
      Contador_int=Contador_in-1,
      quitafilas(Tabla_in,Contador_int,Contador_out,Tabla_int),
      Tabla_out=Tabla_int.
 
-/*Contador_out se utiliza para saber cuantas filas tiene la tabla al final, despuÈs de haber eliminado las correspondientes*/
-/*Con esto conseguimos que aÒadir sea simplemente comparar este n˙mero con 4*/
-/*Si cambiamos este n˙mero de 4 a otro cualquiera en renumera, podemos hacer un tablero a nuestro gusto con la altura deseada*/
+/*Contador_out se utiliza para saber cuantas filas tiene la tabla al final, despu√©s de haber eliminado las correspondientes*/
+/*Con esto conseguimos que a√±adir sea simplemente comparar este n√∫mero con 4*/
+/*Si cambiamos este n√∫mero de 4 a otro cualquiera en renumera, podemos hacer un tablero a nuestro gusto con la altura deseada*/
 
 
 
 /* Sirve para renumerar las que han quedado tras eliminar */
-/*Contador inicia en 0 y llega hasta el lÌmite que es el n˙mero de filas tras aplicar quitafilas*/
+/*Contador inicia en 0 y llega hasta el l√≠mite que es el n√∫mero de filas tras aplicar quitafilas*/
      
   renumera(Tabla,Contador,Limite,Tabla):-
      Contador=Limite.
@@ -206,16 +222,16 @@ clauses
      Contadorn=Contador+1,     
      renumera(Resto,Contadorn,Limite,Tabla_int),
      Fila=[_|TF],
-     NuevaFila=4-(Contador+1), /*Lo cambiÈ porque creo que estaba mal, antes era "NuevaFila=4-(Contadorn+1)"*/
-     /*La razÛn por la que est· mal es porque si yo uso contador nuevo , a la primera fila le asigna un 0*/
-     /*Si queremos cambiar la altura del tablero hay que cambiar este n˙mero tambiÈn */
+     NuevaFila=4-(Contador+1), /*Lo cambi√© porque creo que estaba mal, antes era "NuevaFila=4-(Contadorn+1)"*/
+     /*La raz√≥n por la que est√° mal es porque si yo uso contador nuevo , a la primera fila le asigna un 0*/
+     /*Si queremos cambiar la altura del tablero hay que cambiar este n√∫mero tambi√©n */
      Filan=[NuevaFila|TF],
      Tabla_out=[Filan|Tabla_int].
 
 
 /* Sirve para a?adir tantas filas como haya eliminado */  
-/*Simplemente se van aÒadiendo filas llenas de ceros en la parte de arriba de la tabla*/
-/*Cuando se da la tabla, el primer elemento es la fila m·s alta, en nuestro caso la 4*/
+/*Simplemente se van a√±adiendo filas llenas de ceros en la parte de arriba de la tabla*/
+/*Cuando se da la tabla, el primer elemento es la fila m√°s alta, en nuestro caso la 4*/
 
   anhade(Tabla_int,Contador,Limite,Tabla_out):-
      Contador>=Limite,
@@ -229,16 +245,16 @@ clauses
 
 
 /*Sirve para limpiar las filas que est?n llenas de 1's */
-  limpia_filas(Tabla_in,_,Suelo_out,Tabla_out):-
-     quitafilas(Tabla_in,4,Quedan,Tabla_int),  /* 4 maximo de filas */
-     Quedan<4,                  /* Es para el caso de que se haya quitado alguna fila */
-     recorta(Tabla_int,Quedan,[0,0,0,0,0],Tabla_out,Suelo_out).
+  /*limpia_filas(Tabla_in,_,Suelo_out,Tabla_out) :-*/
+     /*quitafilas(Tabla_in,4,Quedan,Tabla_int),   /* 4 maximo de filas */ */
+     /*Quedan<4,                  /* Es para el caso de que se haya quitado alguna fila */ */
+     /*recorta(Tabla_int,Quedan,[0,0,0,0,0],Tabla_out,Suelo_out)*/
 
   limpia_filas(Tabla,Suelo,Suelo,Tabla).
  
  
  
- /*En el caso de que se haya quitado alguna fila porque estaba llena de unos, hay que usar la funciÛn recorta*/
+ /*En el caso de que se haya quitado alguna fila porque estaba llena de unos, hay que usar la funci√≥n recorta*/
   
   recorta(Tabla_entrada,Restantes,Suelo_entrada,Tabla_out,Suelo_out):-
      /* Renumera las que quedan */
@@ -265,7 +281,7 @@ FILAS DE 3 */
      /* TODO 
         Completar la implementacion de la regla para la columna 3*/
   modifica([A1,A2,A3,A4,A5],[S1,_,_,_,S5],Fila,3,3,Salida,Suelo_out):-
-     /*Es obligatorio que las celdas que vamos a ocupar estÈn vacias*/
+     /*Es obligatorio que las celdas que vamos a ocupar est√©n vacias*/
      A2=0,
      A3=0,
      A4=0,
@@ -367,6 +383,11 @@ FILAS DE 3 */
      Salida=[A1,A2,A3,A4,1],
      S5n=S5+1,
      Suelo_out=[S1,S2,S3,S4,S5n]. 
+  
+  
+  /*Funciona para calcular la altura menor de las tres dadas*/
+  
+  
      
      
 
@@ -379,25 +400,14 @@ FILAS DE 3 */
 /* Ficha XXX*/
 /* Orientacion 0 */     
   mete(f(1,0,Columna),Tablero_in,Tablero_out):-  /*es una T.-->1  con la base horizontal --> 0 centrada en el pivote --> 3*/
-     Tablero_in=tab(Suelo_in,Tabla_in),
-     /* Predicado que determina el nivel del suelo */
-     /* afectados(Suelo_in,1,0,Columna,Suelo_partida),*/    /* ANCHO 3*/ /* Suelo_out Son los afectados para colocar una filita de tres */
+     Tablero_in=tab(Suelo_in,Tabla_in),  
      
      
-     
-     /*inserta en la fila x columna y long z*/
-     /* Fila se obtiene del suelo_out. Es la fila, elemento de suelo, que est? definido en la columna */
-     /*AquÌ queremos el valor de la altura de la columna que le estamos pasando como par·metro para colocar la ficha*/
-     /* CAMBIO obtiene_fila(Fila,Suelo_partida,1,Columna),*/
      Columna>1,Columna<5,
-     /* Fila se obtiene del suelo_out*/  
-     /* Tiene que analizar 2 columnas: Columna0 --> Fila0 Columna --> Fila1  y Columna2=Columna+1  --> Fila2
-        Filan1=Fila1+1 y Filan2=Fila2+1
-        y hay que verificar que Filan2<=Filan1+1. 3<=2+1 por ejemplo cabe */
      Columna1=Columna-1,
      Columna3=Columna+1,
      
-     /*Obtiene fila recorre el vector suelo, y devuelve el valor de la altura correspondiente a la columna que le pasamos como par·metro*/
+     /*Obtiene fila recorre el vector suelo, y devuelve el valor de la altura correspondiente a la columna que le pasamos como par√°metro*/
      obtiene_fila(Fila1,Suelo_in,1,Columna1),           
      obtiene_fila(Fila2,Suelo_in,1,Columna),
      obtiene_fila(Fila3,Suelo_in,1,Columna3),
@@ -408,32 +418,32 @@ FILAS DE 3 */
      Fila2n=Fila2+1,
      Fila3n=Fila3+1,
      
+     menor(Fila1n, Fila2n, Fila_menor),
+     menor(Fila3n, Fila_menor, Fila_menorisima),
      
-     /*Los valores de la altura de la columna anterior y posterior a la de referencia deben de ser iguales o menores a la altura de la col. de ref.*/
-     /*Estas comprobaciones se deben a que la pieza de T invertida no puede quedar sostenida solamente de una esquina de la base*/
-     /*Tiene que quedar soportada por la celda central, o bien por varias de las celdas de la parte inferior*/
-     Fila1n<=Fila2n,
-     Fila3n<=Fila2n,
+     /*En este caso no hace falta las comprobaciones porque ya tenemos la fila menor*/
+     /*Fila1n<=Fila2n,*/
+     /*Fila3n<=Fila2n,*/
+     
+     
+     
      
      /*Asignamos el valor de la altura de la columna de referencia a Filanueva y comprobamos que no se salga del tablero*/
      
-     Fila1n<4,
+     Fila_menorisima < 4,
      
      /*Cambiamos las filas*/
-     cambia_fila(Tabla_in,Suelo_in,Fila1n,Columna,3,Tabla_int,Suelo_int),
+     cambia_fila(Tabla_in,Suelo_in,Fila_menorisima,Columna,3,Tabla_int,Suelo_int),
      Fila22=Fila1n+1,
      cambia_fila(Tabla_int,Suelo_int,Fila22,Columna,1,Tabla_preout,Suelo_preout),
      limpia_filas(Tabla_preout,Suelo_preout,Suelo_out,Tabla_out),
      Tablero_out=tab(Suelo_out,Tabla_out).
      
      
-     
-     
-
 /*       X  */
 /*       XX */
 /* Ficha X  */
-/* Orientacion 1 */    
+/* Orientacion 1 , La Fila disponible en la columna izquierda es menor o igual que la derecha*/    
  
 mete(f(1,1,Columna),Tablero_in,Tablero_out):-  /*es una T.-->1  con la base horizontal --> 0 centrada en el pivote --> 3*/
      Tablero_in=tab(Suelo_in,Tabla_in),
@@ -441,7 +451,7 @@ mete(f(1,1,Columna),Tablero_in,Tablero_out):-  /*es una T.-->1  con la base hori
      /* afectados(Suelo_in,1,1,Columna,Suelo_partida), NO ESTABA DEFINIDO */    /* ANCHO 1*/ /* Suelo_out Son los afectados para colocar una fila de 1, 1 de 2 y 1 de 1 */
    
      /*inserta en la fila x columna y long z*/
-     Columna>=1,Columna<5,  /*He cambiado el <= 5 por <5 porque el pivote est· en la primera columna que se inserta (creo que estaba mal)*/
+     Columna>=1,Columna<5,  /*He cambiado el <= 5 por <5 porque el pivote est√° en la primera columna que se inserta (creo que estaba mal)*/
 
      /* Fila se obtiene del suelo_out*/  
      /* Tiene que analizar 2 columnas: Columna --> Fila1  y Columna2=Columna+1  --> Fila2
@@ -454,10 +464,48 @@ mete(f(1,1,Columna),Tablero_in,Tablero_out):-  /*es una T.-->1  con la base hori
      Fila2n=Fila2+1,
      Fila1n=Fila1+1,
      
-     Fila2n<=Fila1n+1,
+     Filan = Fila2n - 1,
+     Filan < 3,
+     Fila1n <= Filan,
      
-     Fila1n<3,
      
+     
+     
+     cambia_fila(Tabla_in,Suelo_in,Filan,Columna,1,Tabla_int,Suelo_int),
+     Fila22=Filan+1,
+     cambia_fila(Tabla_int,Suelo_int,Fila22,Columna,2,Tabla_int2,Suelo_int2),
+     Fila3=Fila22+1,
+     cambia_fila(Tabla_int2,Suelo_int2,Fila3,Columna,1,Tabla_preout,Suelo_preout),
+     limpia_filas(Tabla_preout,Suelo_preout,Suelo_out,Tabla_out),
+     Tablero_out=tab(Suelo_out,Tabla_out).
+     
+
+/*       X  */
+/*       XX */
+/* Ficha X  */
+/* Orientacion 1 , La Fila disponible en la columna izquierda es mayor que la derecha*/    
+ 
+mete(f(1,1,Columna),Tablero_in,Tablero_out):-  /*es una T.-->1  con la base horizontal --> 0 centrada en el pivote --> 3*/
+     Tablero_in=tab(Suelo_in,Tabla_in),
+     /* Predicado que determina el nivel del suelo */
+     /* afectados(Suelo_in,1,1,Columna,Suelo_partida), NO ESTABA DEFINIDO */    /* ANCHO 1*/ /* Suelo_out Son los afectados para colocar una fila de 1, 1 de 2 y 1 de 1 */
+   
+     /*inserta en la fila x columna y long z*/
+     Columna>=1,Columna<5,  /*He cambiado el <= 5 por <5 porque el pivote est√° en la primera columna que se inserta (creo que estaba mal)*/
+
+     /* Fila se obtiene del suelo_out*/  
+     /* Tiene que analizar 2 columnas: Columna --> Fila1  y Columna2=Columna+1  --> Fila2
+        Filan1=Fila1+1 y Filan2=Fila2+1
+        y hay que verificar que Filan2<=Filan1+1. 3<=2+1 por ejemplo cabe */ 
+     Columna2=Columna+1,       
+     obtiene_fila(Fila1,Suelo_in,1,Columna),
+     obtiene_fila(Fila2,Suelo_in,1,Columna2),
+          
+     Fila2n=Fila2+1,
+     Fila1n=Fila1+1,
+     
+     Fila1n > Fila2n,
+     Fila1n < 3,    
      
      cambia_fila(Tabla_in,Suelo_in,Fila1n,Columna,1,Tabla_int,Suelo_int),
      Fila22=Fila1n+1,
@@ -466,10 +514,12 @@ mete(f(1,1,Columna),Tablero_in,Tablero_out):-  /*es una T.-->1  con la base hori
      cambia_fila(Tabla_int2,Suelo_int2,Fila3,Columna,1,Tabla_preout,Suelo_preout),
      limpia_filas(Tabla_preout,Suelo_preout,Suelo_out,Tabla_out),
      Tablero_out=tab(Suelo_out,Tabla_out).
+     
+     
 
 /*       XXX  */
 /* Ficha  X */
-/* Orientacion 2 */     
+/* Orientacion 2 , Primer escenario en el que Fila1n o Fila3n est√° por encima de Fila2n + 1*/     
   mete(f(1,2,Columna),Tablero_in,Tablero_out):-  /*es una T.-->1  con la base horizontal --> 0 centrada en la columna --> 3*/
 	
 
@@ -488,31 +538,64 @@ mete(f(1,1,Columna),Tablero_in,Tablero_out):-  /*es una T.-->1  con la base hori
      Fila2n = Fila2 + 1,
      Fila3n = Fila3 + 1,
      
-     /*Realizamos las comprobaciones para que las columnas de las celdas de los extremos tengan una altura inferior o igual a la de la columna de referencia*/
-     Fila1n <= Fila2n + 1,
-     Fila3n <= Fila2n + 1,
+     /*Comprobamos que Fila1n es menor a las dem√°s*/
+     mayor(Fila1n, Fila3n, Mayor),
+     Mayor >= Fila2n + 1,
      
-     /*Comprobamos que la ficha no se sale del tablero por arriba*/
-     Fila2n<=3,
+     Filan = Mayor - 1,
+     Filan < 4,
      
-     /*AÒadimos las celdas a cada una de las filas*/
+     /*A√±adimos las celdas a cada una de las filas*/
+     cambia_fila(Tabla_in,Suelo_in,Filan,Columna,1,Tabla_int,Suelo_int),
+     Fila22=Filan+1,
+     cambia_fila(Tabla_int,Suelo_int,Fila22,Columna,3,Tabla_preout,Suelo_preout),
+     limpia_filas(Tabla_preout,Suelo_preout,Suelo_out,Tabla_out),
+     Tablero_out=tab(Suelo_out,Tabla_out).
+
+
+/*       XXX  */
+/* Ficha  X */
+/* Orientacion 2 , Segundo escenario en el que la columna 2 est√° por encima de las dem√°s*/     
+  mete(f(1,2,Columna),Tablero_in,Tablero_out):-  /*es una T.-->1  con la base horizontal --> 0 centrada en la columna --> 3*/
+	
+
+     /* TODO 
+        Completar la implementacion de la regla */
+
+     Tablero_in=tab(Suelo_in,Tabla_in),
+     Columna>1,Columna<5,
+     Columna1 = Columna - 1,
+     Columna3 = Columna + 1,
+     obtiene_fila(Fila1,Suelo_in,1,Columna1),
+     obtiene_fila(Fila2, Suelo_in,1, Columna),
+     obtiene_fila(Fila3,Suelo_in,1,Columna3),
+     
+     Fila1n = Fila1 + 1,
+     Fila2n = Fila2 + 1,
+     Fila3n = Fila3 + 1,
+     
+     /*Comprobamos que Fila1n es menor a las dem√°s*/
+     mayor(Fila1n, Fila3n, Mayor),
+     Fila2n >= Mayor,
+     Fila2n < 4,
+     
+     /*A√±adimos las celdas a cada una de las filas*/
      cambia_fila(Tabla_in,Suelo_in,Fila2n,Columna,1,Tabla_int,Suelo_int),
      Fila22=Fila2n+1,
      cambia_fila(Tabla_int,Suelo_int,Fila22,Columna,3,Tabla_preout,Suelo_preout),
      limpia_filas(Tabla_preout,Suelo_preout,Suelo_out,Tabla_out),
      Tablero_out=tab(Suelo_out,Tabla_out).
-     
-     
+
 
 
 /*        X  */
 /*       XX  */
 /* Ficha  X  */
-/* Orientacion 3 */     
+/* Orientacion 3 , Primer escenario en el que la fila disponible de la derecha es menor que la disponible de la col izquierda m√°s 1*/     
 mete(f(1,3,Columna),Tablero_in,Tablero_out):-  /*es una T.-->1  con la base horizontal --> 0 centrada en pivote --> 3*/
      Tablero_in=tab(Suelo_in,Tabla_in),
      
-     Columna > 1, Columna <= 5, /*AquÌ si que puede ser la columna igual a 5 porque el pivote est· en la segunda columna a insertar*/
+     Columna > 1, Columna <= 5, /*Aqu√≠ si que puede ser la columna igual a 5 porque el pivote est√° en la segunda columna a insertar*/
      Columna1 = Columna -1,
      obtiene_fila(Fila1,Suelo_in,1,Columna1),
      obtiene_fila(Fila2, Suelo_in,1, Columna),
@@ -520,18 +603,52 @@ mete(f(1,3,Columna),Tablero_in,Tablero_out):-  /*es una T.-->1  con la base hori
      Fila1n = Fila1 + 1,
      Fila2n = Fila2 + 1,
      
-     /*Esto se comprueba para que el elemento saliente de la T no tenga ning˙n obst·culo por encima de la altura en la que se va a colocar*/
-     Fila1n<=Fila2 + 1,
+     /*Esto se comprueba para que el elemento saliente de la T no tenga ning√∫n obst√°culo por encima de la altura en la que se va a colocar*/
+     Fila1n <= Fila2n + 1,
       
      
      /*Comprobamos las alturas*/
      Fila2n < 3, /*Si esta altura es 2 podemos colocar la pieza sin problemas*/
      
-     /*AÒadimos celdas*/
-     /*AÒadimos la primera celda*/
+     /*A√±adimos celdas*/
+     /*A√±adimos la primera celda*/
      cambia_fila(Tabla_in,Suelo_in,Fila2n,Columna,1,Tabla_int,Suelo_int),
      Fila22=Fila2n+1,
-     /*AÒadimos la segunda fila de 2 celdas, teniendo en cuenta que la referencia la tenemos en la columna de antes de la referencia, esto es en la columna0*/
+     /*A√±adimos la segunda fila de 2 celdas, teniendo en cuenta que la referencia la tenemos en la columna de antes de la referencia, esto es en la columna0*/
+     cambia_fila(Tabla_int,Suelo_int,Fila22,Columna1 ,2,Tabla_int2,Suelo_int2),
+     Fila3=Fila22+1,
+     cambia_fila(Tabla_int2,Suelo_int2,Fila3,Columna,1,Tabla_preout,Suelo_preout),
+     limpia_filas(Tabla_preout,Suelo_preout,Suelo_out,Tabla_out),
+     Tablero_out=tab(Suelo_out,Tabla_out).
+     
+     
+     
+/*        X  */
+/*       XX  */
+/* Ficha  X  */
+/* Orientacion 3 , Segundo escenario en el que la fila disponible en la columna izquierda es mayor y la columna derecha se queda "flotando"*/     
+mete(f(1,3,Columna),Tablero_in,Tablero_out):-  /*es una T.-->1  con la base horizontal --> 0 centrada en pivote --> 3*/
+     Tablero_in=tab(Suelo_in,Tabla_in),
+     
+     Columna > 1, Columna <= 5, /*Aqu√≠ si que puede ser la columna igual a 5 porque el pivote est√° en la segunda columna a insertar*/
+     Columna1 = Columna -1,
+     obtiene_fila(Fila1,Suelo_in,1,Columna1),
+     obtiene_fila(Fila2, Suelo_in,1, Columna),
+     
+     Fila1n = Fila1 + 1,
+     Fila2n = Fila2 + 1,
+     
+     /*Esto se comprueba para que el elemento saliente de la T no tenga ning√∫n obst√°culo por encima de la altura en la que se va a colocar*/
+     Fila1n >= Fila2n + 1,
+     Filan = Fila1n - 1,
+     Filan < 3,
+      
+     
+     /*A√±adimos celdas*/
+     /*A√±adimos la primera celda*/
+     cambia_fila(Tabla_in,Suelo_in,Filan,Columna,1,Tabla_int,Suelo_int),
+     Fila22=Filan+1,
+     /*A√±adimos la segunda fila de 2 celdas, teniendo en cuenta que la referencia la tenemos en la columna de antes de la referencia, esto es en la columna0*/
      cambia_fila(Tabla_int,Suelo_int,Fila22,Columna1 ,2,Tabla_int2,Suelo_int2),
      Fila3=Fila22+1,
      cambia_fila(Tabla_int2,Suelo_int2,Fila3,Columna,1,Tabla_preout,Suelo_preout),
@@ -543,7 +660,7 @@ mete(f(1,3,Columna),Tablero_in,Tablero_out):-  /*es una T.-->1  con la base hori
 /*  TIPO   2. CUADRADO */     
 /*               */
 /*       XX      */
-/* Ficha XX     */
+/* Ficha XX     Primer caso en el que la columna de la izquierda tiene una altura mayor*/
 /* Orientacion CUalquiera*/     
 mete(f(2,_,Columna),Tablero_in,Tablero_out):-  /*es un cuadrado.-->1  con la base horizontal --> 0 centrada en la esquina izqd --> 3*/
      Tablero_in=tab(Suelo_in,Tabla_in),
@@ -564,15 +681,60 @@ mete(f(2,_,Columna),Tablero_in,Tablero_out):-  /*es un cuadrado.-->1  con la bas
      Fila2n=Fila2+1,
      Fila1n=Fila1+1,
      
-     Fila2n<=Fila1n,
+     /*En este caso le indicamos que escoja la columna que m√°s alta tenga su disponibilidad y coloque el cubo*/
+     Fila1n >= Fila2n,
      
-     Fila1n<4,
+     Filan = Fila1n,
+     
+     Filan < 4,
 
-     cambia_fila(Tabla_in,Suelo_in,Fila1n,Columna,2,Tabla_int,Suelo_int),
-     Fila22=Fila1n+1,
+     cambia_fila(Tabla_in,Suelo_in,Filan,Columna,2,Tabla_int,Suelo_int),
+     Fila22=Filan+1,
      cambia_fila(Tabla_int,Suelo_int,Fila22,Columna,2,Tabla_preout,Suelo_preout),
      limpia_filas(Tabla_preout,Suelo_preout,Suelo_out,Tabla_out),
      Tablero_out=tab(Suelo_out,Tabla_out).
+     
+     
+     
+     
+/*  TIPO   2. CUADRADO */     
+/*               */
+/*       XX      */
+/* Ficha XX     Segundo caso en el que la columna de la derecha tiene una altura mayor*/
+/* Orientacion CUalquiera*/     
+mete(f(2,_,Columna),Tablero_in,Tablero_out):-  /*es un cuadrado.-->1  con la base horizontal --> 0 centrada en la esquina izqd --> 3*/
+     Tablero_in=tab(Suelo_in,Tabla_in),
+     /* Predicado que determina el nivel del suelo */
+     /* afectados(Suelo_in,2,_,Columna,Suelo_partida), NO ESTABA DEFINIDO */   /* ANCHO 1*/ /* Suelo_out Son los afectados para colocar una fila de 1, 1 de 2 y 1 de 1 */
+     Columna>=1,Columna<5,
+
+     /*inserta en la fila x columna y long z*/
+     
+          /* Fila se obtiene del suelo_out*/  
+     /* Tiene que analizar 2 columnas: Columna --> Fila1  y Columna2=Columna+1  --> Fila2
+        Filan1=Fila1+1 y Filan2=Fila2+1
+        y hay que verificar que Filan2<=Filan1. 3<=2+1 por ejemplo cabe */ 
+     Columna2=Columna+1,       
+     obtiene_fila(Fila1,Suelo_in,1,Columna),
+     obtiene_fila(Fila2,Suelo_in,1,Columna2),
+          
+     Fila2n=Fila2+1,
+     Fila1n=Fila1+1,
+     
+     /*En este caso le indicamos que escoja la columna que m√°s alta tenga su disponibilidad y coloque el cubo*/
+     Fila1n < Fila2n,
+     
+     Filan = Fila2n,
+     
+     Filan < 4,
+
+     cambia_fila(Tabla_in,Suelo_in,Filan,Columna,2,Tabla_int,Suelo_int),
+     Fila22=Filan+1,
+     cambia_fila(Tabla_int,Suelo_int,Fila22,Columna,2,Tabla_preout,Suelo_preout),
+     limpia_filas(Tabla_preout,Suelo_preout,Suelo_out,Tabla_out),
+     Tablero_out=tab(Suelo_out,Tabla_out).
+
+
      
 
 /*TIPO 3. ELE  */
@@ -602,13 +764,17 @@ mete(f(3,0,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base hori
      Fila2n=Fila2+1,
      Fila3n=Fila3+1,
      
-     Fila1n<=Fila2n,
-     Fila3n<=Fila2n,
+     /*De nuevo igual que con la primera ficha, escogemos la ccolumna con la disponibilidad m√°s limitada (altura disponible m√°s alta) de las tres*/
      
-     Fila1n<4,
+     mayor(Fila1n, Fila2n, Mayor),
+     mayor(Fila3n, Mayor, Mayorisimo),
+     
+     Filan = Mayorisimo,
+     
+     Filan < 4,
 
-     cambia_fila(Tabla_in,Suelo_in,Fila1n,Columna,3,Tabla_int,Suelo_int),
-     Fila22=Fila1n+1,
+     cambia_fila(Tabla_in,Suelo_in,Filan,Columna,3,Tabla_int,Suelo_int),
+     Fila22=Filan+1,
      cambia_fila(Tabla_in,Suelo_in,Fila22,Columna3,1,Tabla_int,Suelo_int),
      limpia_filas(Tabla_int,Suelo_int,Suelo_out,Tabla_out),
      Tablero_out=tab(Suelo_out,Tabla_out).
@@ -635,12 +801,16 @@ mete(f(3,1,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base hori
      Fila2n=Fila2+1,
      Fila1n=Fila1+1,
      
-     Fila2n<=Fila1n,
+     /*Lo mismo que en el caso de arriba pero con dos columnas*/
      
-     Fila1n<3,
+     mayor(Fila1n, Fila2n, Mayor),
+     
+     Filan = Mayor,
+     
+     Filan < 3,
 
-     cambia_fila(Tabla_in,Suelo_in,Fila1n,Columna,2,Tabla_int,Suelo_int),
-     Fila22=Fila1n+1,
+     cambia_fila(Tabla_in,Suelo_in,Filan,Columna,2,Tabla_int,Suelo_int),
+     Fila22=Filan+1,
      cambia_fila(Tabla_int,Suelo_int,Fila22,Columna,1,Tabla_preint,Suelo_preint),
      Fila3=Fila22+1,
      cambia_fila(Tabla_preint,Suelo_preint,Fila3,Columna,1,Tabla_preout,Suelo_preout),
@@ -651,7 +821,7 @@ mete(f(3,1,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base hori
 /*FICHA ELE    */
 /*             */
 /*       XXX   */
-/* Ficha X     */     
+/* Ficha X    , Primer caso en el que la columna de la izquierda es menor que la mayor de las otras dos - 1(colocamos la pieza sobre la columna izquierda)*/     
 mete(f(3,2,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base horizontal --> 1 centrada en la columna --> 3*/
      Tablero_in=tab(Suelo_in,Tabla_in),
      /* Predicado que determina el nivel del suelo */
@@ -671,8 +841,11 @@ mete(f(3,2,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base hori
      Fila2n=Fila2+1,
      Fila3n=Fila3+1,
      
-     Fila1n<=Fila2n-1,
-     Fila3n<=Fila2n,
+     mayor(Fila2n, Fila3n, Mayor),
+     
+     Fila1n <= Mayor - 1,
+     
+     Fila1n < 4,
      
      
      cambia_fila(Tabla_in,Suelo_in,Fila1n,Columna1,1,Tabla_int,Suelo_int),
@@ -681,13 +854,51 @@ mete(f(3,2,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base hori
      limpia_filas(Tabla_int,Suelo_int,Suelo_out,Tabla_out),
      Tablero_out=tab(Suelo_out,Tabla_out).
      
+
+/*FICHA ELE    */
+/*             */
+/*       XXX   */
+/* Ficha X    , Segundo caso en el que la columna m√°s restrictiva entre la columna 2 y 3 es mayor a la altura de col1 + 1*/     
+mete(f(3,2,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base horizontal --> 1 centrada en la columna --> 3*/
+     Tablero_in=tab(Suelo_in,Tabla_in),
+     /* Predicado que determina el nivel del suelo */
+     /* afectados(Suelo_in,3,2,Columna,Suelo_partida), NO ESTABA DEFINIDO*/   /* ANCHO 1*/ /* Suelo_out Son los afectados para colocar una fila de 3, y 1 de 1 */
+     Columna>1,Columna<5,
+     /* Fila se obtiene del suelo_out*/  
+     /* Tiene que analizar 2 columnas: Columna0 --> Fila0 Columna --> Fila1  y Columna2=Columna+1  --> Fila2
+        Filan1=Fila1+1 y Filan2=Fila2+1
+        y hay que verificar que Filan2<=Filan1+1. 3<=2+1 por ejemplo cabe */
+     Columna1=Columna-1,
+     Columna3=Columna+1,
+     obtiene_fila(Fila1,Suelo_in,1,Columna1),           
+     obtiene_fila(Fila2,Suelo_in,1,Columna),
+     obtiene_fila(Fila3,Suelo_in,1,Columna3),
+          
+     Fila1n=Fila1+1,
+     Fila2n=Fila2+1,
+     Fila3n=Fila3+1,
      
+     mayor(Fila2n, Fila3n, Mayor),
+     
+     Mayor > Fila1n + 1,
+     
+     Filan = Mayor - 1,
+     
+     Filan < 4,
+     
+     
+     cambia_fila(Tabla_in,Suelo_in,Filan,Columna1,1,Tabla_int,Suelo_int),
+     Fila22=Filan+1,
+     cambia_fila(Tabla_in,Suelo_in,Fila22,Columna,3,Tabla_int,Suelo_int),
+     limpia_filas(Tabla_int,Suelo_int,Suelo_out,Tabla_out),
+     Tablero_out=tab(Suelo_out,Tabla_out).
+
 
 /*FICHA ELE   */
 /*       XX   */
 /*        X   */
 /* Ficha  X   */
-/* Orientacion CUalquiera*/     
+/* Orientacion CUalquiera, Primer caso en el que la columna de la derecha se coloca y la primera columna "flota"*/     
 mete(f(3,3,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base horizontal --> 1 centrada en la columna --> 3*/
      Tablero_in=tab(Suelo_in,Tabla_in),
      /* Predicado que determina el nivel del suelo */
@@ -706,22 +917,66 @@ mete(f(3,3,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base hori
      Fila1n = Fila1 + 1,
      Fila2n = Fila2 + 1,
      
-     /*Esto se debe a que la columna1 se va a escribir dos filas por encima de la segunda columna*/
-     Fila1n <= Fila2n + 2,
+     Fila2n >= Fila1n +2,
      
      /*Comprobaciones para que la figura quepa*/
      Fila2n < 3,
      
+     Filan = Fila2n,
      
-     /*AÒadimos las celdas*/
-     cambia_fila(Tabla_in,Suelo_in,Fila2n,Columna,1,Tabla_int,Suelo_int),
-     Fila22=Fila2n+1,
+     
+     /*A√±adimos las celdas*/
+     cambia_fila(Tabla_in,Suelo_in,Filan,Columna,1,Tabla_int,Suelo_int),
+     Fila22=Filan+1,
      cambia_fila(Tabla_int,Suelo_int,Fila22,Columna,1,Tabla_preint,Suelo_preint),
      Fila3=Fila22+1,
      cambia_fila(Tabla_preint,Suelo_preint,Fila3,Columna1,2,Tabla_preout,Suelo_preout),
      limpia_filas(Tabla_preout,Suelo_preout,Suelo_out,Tabla_out),
      Tablero_out=tab(Suelo_out,Tabla_out).
      
+
+/*FICHA ELE   */
+/*       XX   */
+/*        X   */
+/* Ficha  X   */
+/* Orientacion CUalquiera, Segundo caso en el que es la segunda columna la que "flota"*/     
+mete(f(3,3,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base horizontal --> 1 centrada en la columna --> 3*/
+     Tablero_in=tab(Suelo_in,Tabla_in),
+     /* Predicado que determina el nivel del suelo */
+     /* afectados(Suelo_in,3,3,Columna,Suelo_partida), NO ESTABA DEFINIDO*/   /* ANCHO 1*/ /* Suelo_out Son los afectados para colocar una fila de 3, y 1 de 1 */
+     Columna>1,Columna<=5,
+     /*inserta en la fila x columna y long z*/
+
+     /* Fila se obtiene del suelo_out*/  
+     /* Tiene que analizar 2 columnas: Columna --> Fila1  y Columna2=Columna-1  --> Fila2
+        Filan1=Fila1+1 y Filan2=Fila2+1
+        y hay que verificar que Filan2<=Filan1+1. 3<=2+1 por ejemplo cabe */  
+     Columna1=Columna-1,      
+     obtiene_fila(Fila1,Suelo_in,1,Columna1),
+     obtiene_fila(Fila2,Suelo_in,1,Columna),
+
+     Fila1n = Fila1 + 1,
+     Fila2n = Fila2 + 1,
+     
+     
+     /*En este caso estamos comprobando si la altura de la segunda columna es menor que la altura de la primera columna menos 2*/
+     Fila2n < Fila1n -2,
+     
+     Filan = Fila2n - 2,
+     
+     Filan < 3,
+     
+     
+     /*A√±adimos las celdas*/
+     cambia_fila(Tabla_in,Suelo_in,Filan,Columna,1,Tabla_int,Suelo_int),
+     Fila22=Filan+1,
+     cambia_fila(Tabla_int,Suelo_int,Fila22,Columna,1,Tabla_preint,Suelo_preint),
+     Fila3=Fila22+1,
+     cambia_fila(Tabla_preint,Suelo_preint,Fila3,Columna1,2,Tabla_preout,Suelo_preout),
+     limpia_filas(Tabla_preout,Suelo_preout,Suelo_out,Tabla_out),
+     Tablero_out=tab(Suelo_out,Tabla_out).
+
+
            
         
 /*FICHA ELE_INV*/
@@ -744,14 +999,18 @@ mete(f(4,0,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base hori
      Fila2n = Fila2 + 1,
      Fila3n = Fila3 + 1,
      
-     Fila1n <= Fila2n,
-     Fila3n <= Fila2n,
+     /*En este caso de nuevo comprobamos la columna con la altura m√°s alta de las tres y plantamos la ficha*/
      
-     Fila2n <= 3,
+     mayor(Fila1n, Fila2n, Mayor),
+     mayor(Fila3n, Mayor, Mayorisima),
+     
+     Filan = Mayorisima,
+     
+     Filan < 4,
      
      
-     cambia_fila(Tabla_in,Suelo_in,Fila2n,Columna,3,Tabla_int,Suelo_int),
-     Fila22=Fila2n+1,
+     cambia_fila(Tabla_in,Suelo_in,Filan,Columna,3,Tabla_int,Suelo_int),
+     Fila22=Filan+1,
      cambia_fila(Tabla_in,Suelo_in,Fila22,Columna1,1,Tabla_int,Suelo_int),
      limpia_filas(Tabla_int,Suelo_int,Suelo_out,Tabla_out),
      Tablero_out=tab(Suelo_out,Tabla_out).
@@ -763,7 +1022,7 @@ mete(f(4,0,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base hori
 /*FICHA ELE_INV*/
 /*       XX    */
 /*       X     */
-/* Ficha X     */     
+/* Ficha X     , Primer caso en el que la primera columna es mayor que la segunda columna menos 2, la segunda columna "flota"*/     
 mete(f(4,1,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base horizontal --> 0 centrada en la mitad palo largo --> 3*/
 
 /* En esta zona faltan todas las reglas de la implementaci?n de este tipo de ficha. Ser?an las cuatro orientaciones */
@@ -779,11 +1038,45 @@ mete(f(4,1,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base hori
      
      Fila2n <= Fila1n + 2,
      
-     Fila2n <= 2,
+     Filan = Fila1n, 
+     
+     Filan < 3,
      
      
-     cambia_fila(Tabla_in,Suelo_in,Fila1n,Columna,1,Tabla_int,Suelo_int),
-     Fila22=Fila1n+1,
+     cambia_fila(Tabla_in,Suelo_in,Filan,Columna,1,Tabla_int,Suelo_int),
+     Fila22=Filan+1,
+     cambia_fila(Tabla_int,Suelo_int,Fila22,Columna,1,Tabla_preint,Suelo_preint),
+     Fila3=Fila22+1,
+     cambia_fila(Tabla_preint,Suelo_preint,Fila3,Columna,2,Tabla_preout,Suelo_preout),
+     limpia_filas(Tabla_preout,Suelo_preout,Suelo_out,Tabla_out),
+     Tablero_out=tab(Suelo_out,Tabla_out).
+
+
+/*FICHA ELE_INV*/
+/*       XX    */
+/*       X     */
+/* Ficha X     , Segundo caso en el que es la primera columna la que flota*/     
+mete(f(4,1,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base horizontal --> 0 centrada en la mitad palo largo --> 3*/
+
+/* En esta zona faltan todas las reglas de la implementaci?n de este tipo de ficha. Ser?an las cuatro orientaciones */
+
+     Tablero_in=tab(Suelo_in,Tabla_in),
+     Columna >= 1, Columna <5,
+     Columna2 = Columna + 1,
+     obtiene_fila(Fila1,Suelo_in,1,Columna),
+     obtiene_fila(Fila2,Suelo_in,1,Columna2),
+     
+     Fila1n = Fila1 + 1,
+     Fila2n = Fila2 + 1,
+     
+     Fila1n < Fila2n - 2,
+     
+     Filan = Fila2n - 2,
+     
+     Filan < 3,
+     
+     cambia_fila(Tabla_in,Suelo_in,Filan,Columna,1,Tabla_int,Suelo_int),
+     Fila22=Filan+1,
      cambia_fila(Tabla_int,Suelo_int,Fila22,Columna,1,Tabla_preint,Suelo_preint),
      Fila3=Fila22+1,
      cambia_fila(Tabla_preint,Suelo_preint,Fila3,Columna,2,Tabla_preout,Suelo_preout),
@@ -794,7 +1087,7 @@ mete(f(4,1,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base hori
 /*FICHA ELE_INV*/
 /*             */
 /*       XXX   */
-/* Ficha   X   */     
+/* Ficha   X   , Primer caso en el que la columna 3 es la que apoya y las columnas 1 y 2 flotan*/     
 mete(f(4,0,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base horizontal --> 0 centrada en la mitad palo largo --> 3*/
 
 /* En esta zona faltan todas las reglas de la implementaci?n de este tipo de ficha. Ser?an las cuatro orientaciones */
@@ -811,14 +1104,58 @@ mete(f(4,0,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base hori
      Fila2n = Fila2 + 1,
      Fila3n = Fila3 + 1,
      
-     Fila1n <= Fila2n,
-     Fila3n <= Fila2n - 1,
+     /*Comprobamos si la mayor entre las restricciones de las columnas 1 y 2 es menor que la restricci√≥n de la columna 3 m√°s 1*/
      
-     Fila2n <= 4,
+     mayor(Fila1n, Fila2n, Mayor),
+     
+     Mayor <= Fila3n + 1,
+     
+     Filan = Fila3n,
+     
+     Filan < 4,
      
      
-     cambia_fila(Tabla_in,Suelo_in,Fila3n,Columna3,1,Tabla_int,Suelo_int),
-     Fila22=Fila3n+1,
+     cambia_fila(Tabla_in,Suelo_in,Filan,Columna3,1,Tabla_int,Suelo_int),
+     Fila22=Filan+1,
+     cambia_fila(Tabla_in,Suelo_in,Fila22,Columna,3,Tabla_int,Suelo_int),
+     limpia_filas(Tabla_int,Suelo_int,Suelo_out,Tabla_out),
+     Tablero_out=tab(Suelo_out,Tabla_out).
+
+
+
+/*FICHA ELE_INV*/
+/*             */
+/*       XXX   */
+/* Ficha   X   , Segundo caso en el que la columna que "flota" es la tercera columna*/     
+mete(f(4,0,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base horizontal --> 0 centrada en la mitad palo largo --> 3*/
+
+/* En esta zona faltan todas las reglas de la implementaci?n de este tipo de ficha. Ser?an las cuatro orientaciones */
+
+     Tablero_in=tab(Suelo_in,Tabla_in),
+     Columna > 1, Columna <5,
+     Columna1 = Columna - 1,
+     Columna3 = Columna + 1,
+     obtiene_fila(Fila1,Suelo_in,1,Columna1),
+     obtiene_fila(Fila2,Suelo_in,1,Columna),
+     obtiene_fila(Fila3,Suelo_in,1,Columna3),
+     
+     Fila1n = Fila1 + 1,
+     Fila2n = Fila2 + 1,
+     Fila3n = Fila3 + 1,
+     
+     /*Ahora comprobamos si fila3n es menor que la mayor de entre las alturas de las col 1 y 2 rest√°ndole 1*/
+     
+     mayor(Fila1n, Fila2n, Mayor),
+     
+     Fila3n < Mayor - 1,
+     
+     Filan = Mayor - 1,
+     
+     Filan < 4,
+     
+     
+     cambia_fila(Tabla_in,Suelo_in,Filan,Columna3,1,Tabla_int,Suelo_int),
+     Fila22=Filan+1,
      cambia_fila(Tabla_in,Suelo_in,Fila22,Columna,3,Tabla_int,Suelo_int),
      limpia_filas(Tabla_int,Suelo_int,Suelo_out,Tabla_out),
      Tablero_out=tab(Suelo_out,Tabla_out).
@@ -829,7 +1166,7 @@ mete(f(4,0,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base hori
 /*FICHA ELE_INV*/
 /*        X    */
 /*        X    */
-/* Ficha XX    */     
+/* Ficha XX    , En este caso simplemente hay que conseguir la altura m√°s restrictiva entre las dos columnas y plantar la ficha*/     
 mete(f(4,1,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base horizontal --> 0 centrada en la mitad palo largo --> 3*/
 
 /* En esta zona faltan todas las reglas de la implementaci?n de este tipo de ficha. Ser?an las cuatro orientaciones */
@@ -843,13 +1180,15 @@ mete(f(4,1,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base hori
      Fila1n = Fila1 + 1,
      Fila2n = Fila2 + 1,
      
-     Fila1n <= Fila2n,
+     mayor(Fila1n, Fila2n, Mayor),
      
-     Fila2n <= 2,
+     Filan = Mayor,
+     
+     Filan < 3,
      
      
-     cambia_fila(Tabla_in,Suelo_in,Fila1n,Columna1,2,Tabla_int,Suelo_int),
-     Fila22=Fila1n+1,
+     cambia_fila(Tabla_in,Suelo_in,Filan,Columna1,2,Tabla_int,Suelo_int),
+     Fila22=Filan+1,
      cambia_fila(Tabla_int,Suelo_int,Fila22,Columna,1,Tabla_preint,Suelo_preint),
      Fila3=Fila22+1,
      cambia_fila(Tabla_preint,Suelo_preint,Fila3,Columna,1,Tabla_preout,Suelo_preout),
@@ -907,7 +1246,7 @@ mete(f(4,1,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base hori
      escribelista(T).
 
 /* Predicado para describir las soluciones de como se colocan las fichas */    
-/*Escribe para cada una de las fichas, su identificador, la orientaciÛn, y la columna donde se insertan*/ 
+/*Escribe para cada una de las fichas, su identificador, la orientaci√≥n, y la columna donde se insertan*/ 
   escribesol([]).
   
   escribesol([H|T]):-
@@ -1027,7 +1366,7 @@ mete(f(4,1,Columna),Tablero_in,Tablero_out):-  /*es una L.-->1  con la base hori
   tetris():-
   
      vacia(T),
-     backtrack([1,2,3,3],T,[],Solucion_Final),
+     backtrack([1,2,4,3],T,[],Solucion_Final),
      write(Solucion_Final,'\n').
    
 
