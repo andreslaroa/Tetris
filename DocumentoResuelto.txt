@@ -1,0 +1,86 @@
+[1]> (load "prueba_ejecucion.lsp")
+;; Loading file prueba_ejecucion.lsp ...
+;;  Loading file /home/mtbkiller/Desktop/FSI/lisp/auxiliar.lsp ...
+;;  Loaded file /home/mtbkiller/Desktop/FSI/lisp/auxiliar.lsp
+"--------------------- Pruebas función esvariable ---------------------" 
+"----- Prueba 1 -----" 
+Argumento: (? X)
+Resultado: T
+
+"----- Prueba 2 -----" 
+Argumento: A
+Resultado: NIL
+
+"--------------------- Funcion atomo ---------------------" 
+"----- Prueba 1 -----" 
+Argumento: (? X)
+Resultado: T
+
+"----- Prueba 2 -----" 
+Argumento: A
+Resultado: T
+
+"----- Prueba 3 -----" 
+Argumento: (P (? X))
+Resultado: NIL
+
+"--------------------- Funcion aparece ---------------------" 
+"----- Prueba 1 -----" 
+Argumento1: (? X)
+Argumento2: (P (? Y) (? X))
+Resultado: F
+
+"----- Prueba 2 -----" 
+Argumento1: (? X)
+Argumento2: (P (? Y))
+Resultado: (((P (? Y)) (? X)))
+
+"--------------------- Funcion sustitucion ---------------------" 
+"----- Prueba 1 -----" 
+Argumento1: (((A) (? X)) ((? Y) (? Z)) ((F (? H)) (? K)))
+Argumento2: (P (? X) (G (? K)) (F2 (? Z)))
+Resultado: (P (A) (G (F (? H))) (F2 (? Y)))
+
+"----- Prueba 2 -----" 
+Argumento1: (((A) (? X)) ((B) (? K)) ((F3 (? H)) (? Z)))
+Argumento2: (P (? X) (F (G (? K))) (F2 (? Z)))
+Resultado: (P (A) (F (G (B))) (F2 (F3 (? H))))
+
+"--------------------- Funcion composicion ---------------------" 
+"----- Prueba 1 -----" 
+Argumento1: (((G ((? X) (? Y))) (? Z)))
+Argumento2: (((A) (? X)) ((B) (? Y)) ((C) (? W)) ((D) (? Z)))
+Resultado: (((G ((? X) (? Y))) (? Z)) ((A) (? X)) ((B) (? Y)) ((C) (? W)))
+
+"----- Prueba 2 -----" 
+Argumento1: (((G ((? Y) A)) (? X)) ((B) (? Y)) ((F (? W)) (? Z)))
+Argumento2: (((F (? B)) (? Y)) ((? U) (? W)) ((C) (? R)))
+Resultado: (((G ((? Y) A)) (? X)) ((B) (? Y)) ((F (? W)) (? Z)) ((? U) (? W)) ((C) (? R)))
+
+"--------------------- Funcion unificar ---------------------" 
+"----- Prueba 1 -----" 
+Argumento1: (P (? X) (? Y))
+Argumento2: (P (? Y) (? X))
+Resultado: (((? Y) (? X)))
+
+"----- Prueba 2 -----" 
+Argumento1: (P (? X) (G (? Z)))
+Argumento2: (P (G (? Y)) (? X))
+Resultado: (((G (? Y)) (? X)) ((? Y) (? Z)))
+
+"----- Prueba 3 -----" 
+Argumento1: (P (? X) (? X))
+Argumento2: (P A B)
+Resultado: F
+
+"----- Prueba 4 -----" 
+Argumento1: (F (? X) (G (? X)))
+Argumento2: (F A (G (A)))
+Resultado: (((A) (? X)))
+
+"----- Prueba 5 -----" 
+Argumento1: (F (? Y) A)
+Argumento2: (F (? X) (? X))
+Resultado: (((? X) (? Y)) (A (? X)))
+;; Loaded file prueba_ejecucion.lsp
+#P"/home/mtbkiller/Desktop/FSI/lisp/prueba_ejecucion.lsp"

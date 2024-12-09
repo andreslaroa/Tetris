@@ -1,0 +1,6 @@
+(defun empezar (e1 e2)
+	(prog (e1 e2 sust)
+		(setf sust '())
+		(return (unificar (e1 e2 sust)))
+	)
+)

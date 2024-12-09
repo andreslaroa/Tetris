@@ -1,0 +1,6 @@
+(defun esvariable (var)
+    (if (and(listp var)(eq (first var) '?))
+      (return-from esvariable T)
+      (return-from esvariable NIL)
+    )
+)
